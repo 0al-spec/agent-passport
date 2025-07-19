@@ -269,8 +269,10 @@ passport:
       # Agent's resource requirements (see 5.1.4)
     securityPolicies:
       # Agent's security policies (see 5.1.5)
+  agentIntegrity:
+    # Agent's integrity policies (see 5.1.6)
   signature:
-    # Digital signature and verification details (see 5.1.6)
+    # Digital signature and verification details (see 5.1.7)
 ```
 
 #### 5.1.1. Identification
@@ -555,8 +557,8 @@ Any entity (e.g., another agent, an agent runtime, a policy engine) that needs t
 
 Similar to human passports, Agent Passports require a lifecycle management framework to ensure their ongoing trustworthiness:
 
-  * **Issuance:** The initial creation and signing of the passport [as described in 6.2](#6.2.-passport-issuance-process)
-  * **Expiration:** Passports can be issued with an `expiryDate` ([see 5.1.1](#5.1.1.-identification)) after which they are no longer considered valid. This encourages regular re-validation and updates.
+  * **Issuance:** The initial creation and signing of the passport as described in 6.2
+  * **Expiration:** Passports can be issued with an `expiryDate` (see 5.1.1) after which they are no longer considered valid. This encourages regular re-validation and updates.
   * **Renewal:** Before expiration, a passport can be renewed by the Issuing Authority, potentially after re-validation of the agent and its properties. A renewal typically results in a new passport with an updated `issueDate` and `expiryDate` (and potentially `metadata.version`).
   * **Revocation:** An Agent Passport can be revoked by the Issuing Authority before its `expiryDate` if the agent's trust is compromised (e.g., due to malicious behavior, security vulnerability discovery, or change in ownership). Issuing Authorities must provide a mechanism (e.g., a revocation list or status service) for relying parties to check the revocation status of a passport.
 
@@ -704,7 +706,7 @@ The authors also acknowledge the foundational work in related areas that has ins
 
   * **YAML Specification:** The official specification for YAML Ain't Markup Language (YAML™) Version 1.2.2.
   * **RFC 2119:** S. Bradner, "Key words for use in RFCs to Indicate Requirement Levels," March 1997.
-  * **RFC 8174:** B. Leiba, "Ambiguity of OAUTH when applied to security protocols," May 2017 (clarifies RFC 2119 usage).
+  * **RFC 8174:** B. Leiba, "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words," May 2017 (clarifies RFC 2119 usage).
   * **Cryptographic Signature Standards:** Relevant industry standards for digital signatures (e.g., RSASSA-PSS, EdDSA) and hashing algorithms (e.g., SHA-256) as defined by NIST or other recognized bodies.
 
 ### 12.2. Informative References
