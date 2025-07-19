@@ -21,7 +21,7 @@ Copyright © 2025 Egor Merkushev. All rights reserved.
 
 This document is released under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/). You are free to copy, distribute, and modify this specification, even for commercial purposes, provided that attribution is given to the original author(s).
 
-To contribute to this document, please submit an issue or pull request to the original [GitHub repository](https://github.com/0al-spec/agent-passport). See [CONTRIBUTING.md](https://github.com/0al-spec/agent-passport/CONTRIBUTING.md) for details.
+To contribute to this document, please submit an issue or pull request to the original [GitHub repository](https://github.com/0al-spec/agent-passport). See [CONTRIBUTING.md](https://github.com/0al-spec/agent-passport/blob/main/CONTRIBUTING.md) for details.
 
 *Note: This is not an IETF document and is not subject to BCP 78 or the IETF Trust. However, it follows similar principles of openness and community participation.*
 
