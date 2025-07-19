@@ -4,7 +4,7 @@ This repository provides a comprehensive specification for the **Agent Passport*
 
 ## Drafts
 
-- [Agent Passport RFC](https://github.com/0al-spec/agent-passport/drafts/agent-passport.md)
+- [Agent Passport RFC](https://github.com/0al-spec/agent-passport/blob/main/drafts/agent-passport.md)
 
 ## License
 
