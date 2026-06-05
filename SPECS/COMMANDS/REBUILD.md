@@ -32,17 +32,18 @@ Evidence -> Spec -> Architecture -> Plan -> Migration/Parity.
 
 <workflow>
 
-Steps (open the linked step file and follow it exactly):
-- [STEP 0 — SESSION SETUP (Branch + Paths)](../REBUILD/STEP-0-SESSION-SETUP.md)
-- [STEP 1 — FEATURE SURFACE MAP (Inventory of Entry Points)](../REBUILD/STEP-1-FEATURE-SURFACE-MAP.md)
-- [STEP 2 — OBSERVED BEHAVIOR MATRIX (Evidence Pack)](../REBUILD/STEP-2-OBSERVED-BEHAVIOR-MATRIX.md)
-- [STEP 3 — SPEC DRAFT (Implementation-Agnostic)](../REBUILD/STEP-3-SPEC-DRAFT.md)
-- [STEP 4 — TARGET ARCHITECTURE (Justified, with Dependency Graph)](../REBUILD/STEP-4-TARGET-ARCHITECTURE.md)
-- [STEP 5 — WORKPLAN (Phased Task Graph, Always-Green)](../REBUILD/STEP-5-WORKPLAN.md)
-- [STEP 6 — COMPATIBILITY HARNESS & MIGRATION (Prove Parity)](../REBUILD/STEP-6-COMPATIBILITY-HARNESS.md)
-- [STEP 7 — FINAL PACKAGE (File Set)](../REBUILD/STEP-7-FINAL-PACKAGE.md)
+Steps:
+- STEP 0 — SESSION SETUP (Branch + Paths)
+- STEP 1 — FEATURE SURFACE MAP (Inventory of Entry Points)
+- STEP 2 — OBSERVED BEHAVIOR MATRIX (Evidence Pack)
+- STEP 3 — SPEC DRAFT (Implementation-Agnostic)
+- STEP 4 — TARGET ARCHITECTURE (Justified, with Dependency Graph)
+- STEP 5 — WORKPLAN (Phased Task Graph, Always-Green)
+- STEP 6 — COMPATIBILITY HARNESS & MIGRATION (Prove Parity)
+- STEP 7 — FINAL PACKAGE (File Set)
 
-*Note: The REBUILD/ step files are optional. If they don't exist, follow the workflow above using these steps as guidance.*
+*Note: This repository does not install separate `SPECS/REBUILD/` step files.
+Use the step list above as direct guidance for this command.*
 
 </workflow>
 

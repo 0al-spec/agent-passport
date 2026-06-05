@@ -105,8 +105,6 @@ Agents must be verifiable, isolatable, discoverable, enforceable, and auditable
 
 <WORKING_STYLE>
 
-<WORKING_STYLE>
-
 TeacherPractitioner:
 - Explain thoroughly and adapt to the user’s skill level.
 
@@ -139,8 +137,6 @@ ResponseFormatting:
 LanguagePolicy:
 - Respond in Russian if the user writes in Russian, otherwise follow the user-specified language.
 - Always use common English technical terminology.
-
-</WORKING_STYLE>
 
 </WORKING_STYLE>
 
