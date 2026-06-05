@@ -57,7 +57,7 @@ structure:
 
 # Optional: GitHub template links (detected by SETUP, used by REVIEW)
 # github:
-#   pr_template: .github/pull_request_template.md
+#   pr_template: .github/PULL_REQUEST_TEMPLATE.md
 #   issue_templates_dir: .github/ISSUE_TEMPLATE/
 ```
 
@@ -145,7 +145,7 @@ These don't change `verify.*` commands but inform coverage thresholds, completen
 
 | Path | Key |
 |------|-----|
-| `.github/pull_request_template.md` | `github.pr_template` |
+| `.github/PULL_REQUEST_TEMPLATE.md` | `github.pr_template` |
 | `docs/pull_request_template.md` | `github.pr_template` |
 | `pull_request_template.md` | `github.pr_template` |
 | `.github/PULL_REQUEST_TEMPLATE/` | `github.pr_templates_dir` |
@@ -154,7 +154,7 @@ These don't change `verify.*` commands but inform coverage thresholds, completen
 Example `params.yaml` snippet when templates are found:
 ```yaml
 github:
-  pr_template: .github/pull_request_template.md
+  pr_template: .github/PULL_REQUEST_TEMPLATE.md
   issue_templates_dir: .github/ISSUE_TEMPLATE/
 ```
 

@@ -24,3 +24,6 @@ structure:
   source: src/
   tests: tests/
   examples: examples/
+
+github:
+  pr_template: .github/PULL_REQUEST_TEMPLATE.md

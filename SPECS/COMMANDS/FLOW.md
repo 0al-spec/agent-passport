@@ -36,6 +36,13 @@ Create a new feature branch from `main` for the task.
 Branch for {TASK_ID}: {short description}
 ```
 
+If the BRANCH step produced no file changes, create this checkpoint as an
+empty commit:
+
+```bash
+git commit --allow-empty -m "Branch for {TASK_ID}: {short description}"
+```
+
 ---
 
 ### 2. SELECT
@@ -144,18 +151,22 @@ Follow-up {TASK_ID}: {short subject}
 
 ### 8. ARCHIVE-REVIEW
 
-Archive the REVIEW artifact after FOLLOW-UP is complete.
+Archive the REVIEW artifact when FOLLOW-UP was skipped.
 
 **Actions:**
-- Move `REVIEW_{subject}.md` to `SPECS/ARCHIVE/_Historical/` (or the relevant task folder) using `git mv` so the deletion from `SPECS/INPROGRESS/` is staged automatically
-- Update `SPECS/ARCHIVE/INDEX.md`
+- If FOLLOW-UP ran, skip this step because [`FOLLOW_UP`](PRIMITIVES/FOLLOW_UP.md)
+  already moves `REVIEW_{subject}.md` out of `SPECS/INPROGRESS/`.
+- If FOLLOW-UP was skipped, move `REVIEW_{subject}.md` to
+  `SPECS/ARCHIVE/_Historical/` (or the relevant task folder) using `git mv` so
+  the deletion from `SPECS/INPROGRESS/` is staged automatically.
+- Update `SPECS/ARCHIVE/INDEX.md` when a review file is moved.
 
 **Commit via [`COMMIT`](PRIMITIVES/COMMIT.md):**
 ```
 Archive REVIEW_{subject} report
 ```
 
-*Note: If FOLLOW-UP is skipped, archive the review immediately after REVIEW.*
+*Note: This step is only for reviews without FOLLOW-UP archive handling.*
 
 ---
 
