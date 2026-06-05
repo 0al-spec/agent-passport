@@ -49,7 +49,7 @@ Input: `drafts/agent-passport.md`, current Rust validator implementation, PR #4 
   - Complete: CI runs `cargo fmt --check`.
   - Complete: CI runs `cargo clippy --all-targets -- -D warnings`.
   - Complete: CI runs `cargo test`.
-  - Complete: CI runs `cargo llvm-cov --summary-only --fail-under-lines 60`.
+  - Complete: CI runs `cargo llvm-cov --summary-only --fail-under-lines 68`.
   - Complete: CI runs `cargo audit` and `cargo deny check`.
   - Complete: CI runs a validator CLI smoke test.
 
@@ -139,7 +139,7 @@ Input: `drafts/agent-passport.md`, current Rust validator implementation, PR #4 
 
 ### ☐ AP-P2-T1 — Raise Coverage Gate with Targeted Tests
 
-- **Description:** Expand tests before raising coverage from the current 60%
+- **Description:** Expand tests before raising coverage from the current 68%
   gate toward a production baseline.
 - **Priority:** P0
 - **Dependencies:** AP-P1-T2

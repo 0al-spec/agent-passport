@@ -58,7 +58,7 @@ The GitHub Actions CI pipeline runs:
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
 cargo test
-cargo llvm-cov --summary-only --fail-under-lines 60
+cargo llvm-cov --summary-only --fail-under-lines 68
 cargo audit
 cargo deny check
 cargo run -- validate examples/log-processor.passport.yaml

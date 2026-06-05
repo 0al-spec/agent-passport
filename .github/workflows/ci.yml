@@ -44,7 +44,7 @@ jobs:
         run: cargo install cargo-llvm-cov --locked
 
       - name: Check coverage
-        run: cargo llvm-cov --summary-only --fail-under-lines 60
+        run: cargo llvm-cov --summary-only --fail-under-lines 68
 
       - name: Smoke test CLI
         run: cargo run -- validate examples/log-processor.passport.yaml
