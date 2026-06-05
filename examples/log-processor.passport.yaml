@@ -6,7 +6,7 @@ passport:
     uid: "123e4567-e89b-12d3-a456-426614174000"
     version: "1.0.0"
     issueDate: "2025-01-01T00:00:00Z"
-    expiryDate: "2035-01-01T00:00:00Z"
+    expiryDate: "9999-12-31T23:59:59Z"
     issuer: "InternalCorpCA"
   spec:
     entity:

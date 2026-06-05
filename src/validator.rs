@@ -725,6 +725,16 @@ fn verify_code_hash_file(
         );
         return;
     }
+    if source_path
+        .components()
+        .any(|component| matches!(component, std::path::Component::ParentDir))
+    {
+        report.error(
+            format!("{path}.sourceFile"),
+            "parent directory traversal is not allowed in integrity sourceFile paths",
+        );
+        return;
+    }
 
     let resolved_path = root.join(source_path);
 
@@ -969,6 +979,8 @@ fn to_hex(bytes: &[u8]) -> String {
 mod tests {
     use super::*;
 
+    const VALID_EXPIRY_DATE: &str = "9999-12-31T23:59:59Z";
+
     #[test]
     fn accepts_valid_passport() {
         let report = validate_str(valid_passport(), &CheckOptions::default());
@@ -1003,7 +1015,7 @@ mod tests {
     #[test]
     fn rejects_expired_passport() {
         let source = valid_passport().replace(
-            r#"expiryDate: "2035-01-01T00:00:00Z""#,
+            &format!(r#"expiryDate: "{VALID_EXPIRY_DATE}""#),
             r#"expiryDate: "2001-01-01T00:00:00Z""#,
         );
 
@@ -1087,6 +1099,30 @@ mod tests {
         }));
     }
 
+    #[test]
+    fn rejects_parent_directory_integrity_source_file_paths() {
+        let temp_dir = tempfile::tempdir().expect("temp dir");
+        let source = valid_passport().replace(
+            r#"sourceFile: "agent.bin""#,
+            r#"sourceFile: "../agent.bin""#,
+        );
+
+        let report = validate_str(
+            &source,
+            &CheckOptions {
+                integrity: IntegrityMode::VerifyFiles {
+                    root: temp_dir.path().to_path_buf(),
+                },
+            },
+        );
+
+        assert!(!report.valid);
+        assert!(report.checks.iter().any(|check| {
+            check.path == "$.passport.agentIntegrity.codeHashes[0].sourceFile"
+                && check.message.contains("parent directory traversal")
+        }));
+    }
+
     fn valid_passport() -> &'static str {
         r#"passport:
   apiVersion: "agent-passport.io/v1alpha1"
@@ -1096,7 +1132,7 @@ mod tests {
     uid: "123e4567-e89b-12d3-a456-426614174000"
     version: "1.0.0"
     issueDate: "2025-01-01T00:00:00Z"
-    expiryDate: "2035-01-01T00:00:00Z"
+    expiryDate: "9999-12-31T23:59:59Z"
     issuer: "InternalCorpCA"
   spec:
     entity:
