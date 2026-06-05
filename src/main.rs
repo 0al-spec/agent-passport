@@ -7,6 +7,7 @@ use clap::{Parser, Subcommand};
 #[derive(Debug, Parser)]
 #[command(name = "agent-passport")]
 #[command(about = "Validate Agent Passport YAML documents")]
+#[command(version)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,
