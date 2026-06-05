@@ -1,0 +1,54 @@
+passport:
+  apiVersion: "agent-passport.io/v1alpha1"
+  kind: "AgentPassport"
+  metadata:
+    name: "log-processor-agent"
+    uid: "123e4567-e89b-12d3-a456-426614174000"
+    version: "1.0.0"
+    issueDate: "2025-01-01T00:00:00Z"
+    expiryDate: "9999-12-31T23:59:59Z"
+    issuer: "InternalCorpCA"
+  spec:
+    entity:
+      type: "system-agent"
+      description: "Processes log files from a restricted directory."
+      owner: "IT Operations"
+      contact: "it-ops@example.com"
+    capabilities:
+      - name: "process_logs"
+        description: "Scans log files, filters records, and archives output."
+        signature:
+          parameters: []
+          returns:
+            type: "object"
+            description: "Processing status and counters."
+        accessControl: ["internal-agents"]
+    resources:
+      cpu: "500m"
+      memory: "512Mi"
+      fileSystemAccess:
+        - path: "/var/log/app"
+          permissions: ["read"]
+        - path: "/mnt/archive/logs_app"
+          permissions: ["write"]
+      executables:
+        - "/usr/bin/grep"
+        - "/usr/bin/gzip"
+    securityPolicies:
+      chroot: "/srv/agent-sandboxes/log-processor"
+      capabilities: []
+      networkRestrictions:
+        denyList: ["0.0.0.0/0"]
+      executionEnvironment:
+        isolated: true
+        privileged: false
+  agentIntegrity:
+    codeHashes:
+      - algorithm: "SHA-256"
+        value: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        sourceFile: "bin/log-processor"
+  signature:
+    algorithm: "EdDSA"
+    value: "YWJjZA=="
+    publicKeyRef: "did:example:issuer:InternalCorpCA:key1"
+    signedBy: "InternalCorpCASigner"
