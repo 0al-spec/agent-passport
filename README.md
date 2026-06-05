@@ -70,8 +70,9 @@ Releases are created from version tags. The tag must match the package version
 in `Cargo.toml`:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+# First bump Cargo.toml, then tag the same version.
+git tag v<version>
+git push origin v<version>
 ```
 
 The release workflow validates the tag, runs locked tests, builds release
