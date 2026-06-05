@@ -50,6 +50,20 @@ Full cryptographic signature verification is intentionally not implemented yet:
 the RFC still needs a canonicalization profile and trust-store model so that
 independent implementations verify exactly the same signed bytes.
 
+## Quality gates
+
+The GitHub Actions CI pipeline runs:
+
+```bash
+cargo fmt --check
+cargo clippy --all-targets -- -D warnings
+cargo test
+cargo llvm-cov --summary-only --fail-under-lines 60
+cargo audit
+cargo deny check
+cargo run -- validate examples/log-processor.passport.yaml
+```
+
 ## License
 
 - 🧠 Specifications & Documents (in `drafts/`, `schema/`, `generated`, and `docs/`) are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
