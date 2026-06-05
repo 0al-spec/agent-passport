@@ -110,6 +110,31 @@ Input: `drafts/agent-passport.md`, current Rust validator implementation, PR #4 
   - Advisory warnings remain distinguishable from hard validation errors in
     human and JSON output.
 
+### ☐ AP-P1-T4 — Replace Bespoke Utility Checks with Vetted Crates
+
+- **Description:** Audit hand-written utility validation code and replace it
+  with mature Rust libraries where doing so improves correctness,
+  maintainability, and auditability without expanding the trusted computing
+  base unnecessarily.
+- **Priority:** P1
+- **Dependencies:** AP-P1-T2, AP-P1-T3
+- **Parallelizable:** yes
+- **Status:** Planned
+- **Outputs / Artifacts:** dependency decision notes, focused refactor PR,
+  regression tests.
+- **Acceptance Criteria:**
+  - UUID validation uses `uuid` instead of a custom UUID-like parser.
+  - Semantic version validation uses `semver` instead of split-and-parse logic.
+  - Hex encoding/decoding uses `hex` instead of local nibble parsing.
+  - Path handling for integrity roots evaluates `camino` or a documented
+    standard-library-only policy.
+  - Diagnostic/error modeling evaluates `thiserror` and `miette` before adding
+    stable diagnostic codes.
+  - Enum/string parsing for protocols, data types, algorithms, and validation
+    modes evaluates `strum` or typed enums with manual `FromStr`.
+  - Any new dependency passes `cargo audit`, `cargo deny check`, license review,
+    MSRV review, and feature-surface review.
+
 ## Phase 2. Test Quality and Regression Signal
 
 ### ☐ AP-P2-T1 — Raise Coverage Gate with Targeted Tests
