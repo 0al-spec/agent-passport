@@ -718,11 +718,15 @@ fn verify_code_hash_file(
     };
 
     let source_path = Path::new(source_file);
-    let resolved_path = if source_path.is_absolute() {
-        source_path.to_path_buf()
-    } else {
-        root.join(source_path)
-    };
+    if source_path.is_absolute() {
+        report.error(
+            format!("{path}.sourceFile"),
+            "absolute integrity sourceFile paths are not allowed with --check-integrity",
+        );
+        return;
+    }
+
+    let resolved_path = root.join(source_path);
 
     let contents = match fs::read(&resolved_path) {
         Ok(contents) => contents,
@@ -1059,6 +1063,28 @@ mod tests {
             .checks
             .iter()
             .any(|check| check.message.contains("integrity hash mismatch")));
+    }
+
+    #[test]
+    fn rejects_absolute_integrity_source_file_paths() {
+        let temp_dir = tempfile::tempdir().expect("temp dir");
+        let source =
+            valid_passport().replace(r#"sourceFile: "agent.bin""#, r#"sourceFile: "/etc/passwd""#);
+
+        let report = validate_str(
+            &source,
+            &CheckOptions {
+                integrity: IntegrityMode::VerifyFiles {
+                    root: temp_dir.path().to_path_buf(),
+                },
+            },
+        );
+
+        assert!(!report.valid);
+        assert!(report.checks.iter().any(|check| {
+            check.path == "$.passport.agentIntegrity.codeHashes[0].sourceFile"
+                && check.message.contains("absolute integrity sourceFile")
+        }));
     }
 
     fn valid_passport() -> &'static str {
