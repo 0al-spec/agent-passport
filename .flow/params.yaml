@@ -1,0 +1,29 @@
+# Flow project configuration for agent-passport.
+# Safe to edit freely; Flow updates replace SPECS/COMMANDS and SPECS/ROLES, not this file.
+
+project:
+  name: agent-passport
+  description: Rust CLI and library for validating Agent Passport YAML documents.
+  language: Rust
+  package_manager: cargo
+  default_branch: main
+
+verify:
+  tests: cargo test --locked
+  lint: cargo clippy --all-targets -- -D warnings
+  format: cargo fmt --check
+  coverage: cargo llvm-cov --summary-only --fail-under-lines 68
+  coverage_threshold: 68
+
+task_system:
+  kind: file
+  project_key: AP
+  task_url_template: "SPECS/Workplan.md#{task_id}-{task_name_slug}"
+
+structure:
+  source: src/
+  tests: tests/
+  examples: examples/
+
+github:
+  pr_template: .github/PULL_REQUEST_TEMPLATE.md
