@@ -64,6 +64,20 @@ cargo deny check
 cargo run -- validate examples/log-processor.passport.yaml
 ```
 
+## Releases
+
+Releases are created from version tags. The tag must match the package version
+in `Cargo.toml`:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The release workflow validates the tag, runs locked tests, builds release
+binaries for Linux and macOS, smoke-tests the binary, publishes SHA-256
+checksums, and creates the GitHub Release.
+
 ## License
 
 - 🧠 Specifications & Documents (in `drafts/`, `schema/`, `generated`, and `docs/`) are licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0).

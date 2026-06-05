@@ -376,21 +376,42 @@ Input: `drafts/agent-passport.md`, current Rust validator implementation, PR #4 
   - Path-sensitive integrity tests are platform-aware.
   - Windows support is either implemented or explicitly documented as deferred.
 
-### ☐ AP-P5-T3 — Add SBOM and Release Artifact Workflow
+### ✅ AP-P5-T3 — Add Tag-Based Release Artifact Workflow
 
-- **Description:** Prepare signed release artifacts and supply-chain metadata
-  for the CLI.
+- **Description:** Create GitHub Releases automatically when a version tag is
+  pushed.
+- **Priority:** P1
+- **Dependencies:** AP-P0-T2
+- **Parallelizable:** yes
+- **Status:** Complete
+- **Outputs / Artifacts:** `.github/workflows/release.yml`, README release
+  instructions.
+- **Acceptance Criteria:**
+  - Complete: Release workflow triggers on `v*.*.*` tags.
+  - Complete: Workflow rejects tags that do not match `Cargo.toml` package
+    version.
+  - Complete: Workflow runs locked tests and release builds.
+  - Complete: Workflow smoke-tests the release binary against the committed
+    sample passport.
+  - Complete: Workflow publishes Linux and macOS binaries with SHA-256 checksum
+    files to a GitHub Release.
+
+### ☐ AP-P5-T4 — Add SBOM and Release Signing Hardening
+
+- **Description:** Add supply-chain metadata and artifact signing on top of the
+  tag-based release workflow.
 - **Priority:** P2
-- **Dependencies:** AP-P5-T1
+- **Dependencies:** AP-P5-T1, AP-P5-T3
 - **Parallelizable:** yes
 - **Status:** Planned
-- **Outputs / Artifacts:** release workflow, checksums, SBOM.
+- **Outputs / Artifacts:** SBOM, signing workflow, release provenance
+  documentation.
 - **Acceptance Criteria:**
-  - Release builds produce reproducible checksums for supported targets.
   - SBOM generation is documented and attached to releases.
+  - Release artifacts are signed or accompanied by documented provenance.
   - Release artifacts do not include private keys or machine-local paths.
 
-### ☐ AP-P5-T4 — Add Minimum Supported Rust Version Policy
+### ☐ AP-P5-T5 — Add Minimum Supported Rust Version Policy
 
 - **Description:** Define and test the minimum Rust version supported by the
   CLI and library.

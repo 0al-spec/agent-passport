@@ -1,0 +1,165 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  validate-tag:
+    name: Validate release tag
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate tag and Cargo version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          version="$(awk -F '"' '/^version = / { print $2; exit }' Cargo.toml)"
+
+          if [[ -z "${version}" ]]; then
+            echo "Could not read package version from Cargo.toml" >&2
+            exit 1
+          fi
+
+          if [[ ! "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Release tag must use vMAJOR.MINOR.PATCH, got ${tag}" >&2
+            exit 1
+          fi
+
+          if [[ "${tag}" != "v${version}" ]]; then
+            echo "Release tag ${tag} does not match Cargo.toml version ${version}" >&2
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+  build:
+    name: Build ${{ matrix.os }}
+    needs: validate-tag
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Run tests
+        run: cargo test --locked
+
+      - name: Build release binary
+        run: cargo build --release --locked
+
+      - name: Smoke test release binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./target/release/agent-passport validate examples/log-processor.passport.yaml
+
+      - name: Package release artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          version="${{ needs.validate-tag.outputs.version }}"
+          host="$(rustc -vV | sed -n 's/^host: //p')"
+          asset="agent-passport-${version}-${host}"
+
+          mkdir -p dist
+          cp target/release/agent-passport "dist/${asset}"
+          chmod 0755 "dist/${asset}"
+
+          (
+            cd dist
+            if command -v sha256sum >/dev/null 2>&1; then
+              sha256sum "${asset}" > "${asset}.sha256"
+            else
+              shasum -a 256 "${asset}" > "${asset}.sha256"
+            fi
+          )
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.os }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub Release
+    needs:
+      - validate-tag
+      - build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download release artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.validate-tag.outputs.tag }}
+          RELEASE_VERSION: ${{ needs.validate-tag.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ls -la dist
+
+          cat > release-notes.md <<EOF
+          Agent Passport CLI ${RELEASE_VERSION}
+
+          This release publishes host-native Linux and macOS binaries for
+          \`agent-passport validate\`.
+
+          Validation performed by the release workflow:
+
+          - \`cargo test --locked\`
+          - \`cargo build --release --locked\`
+          - release-binary smoke validation against
+            \`examples/log-processor.passport.yaml\`
+
+          Each binary is accompanied by a SHA-256 checksum file.
+          EOF
+
+          gh release create "${RELEASE_TAG}" dist/* \
+            --verify-tag \
+            --title "agent-passport ${RELEASE_VERSION}" \
+            --notes-file release-notes.md
