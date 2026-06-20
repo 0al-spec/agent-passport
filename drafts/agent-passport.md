@@ -640,7 +640,7 @@ To ensure forward compatibility and flexibility, the Agent Passport specificatio
 
   * **Addition of New Fields:** New fields CAN be added to existing objects within the Agent Passport schema. Implementations MUST be designed to gracefully ignore any unknown fields they encounter.
   * **Addition of New Top-Level Sections:** Entirely new top-level sections CAN be introduced.
-  * **x- Prefixes for Experimental Fields (Proposed):** For experimental or vendor-specific fields, a convention of using an `x-` prefix (e.g., `x-custom-field`) is proposed.
+  * **x- Prefixes for Experimental Fields:** For experimental or vendor-specific fields, a convention of using an `x-` prefix (e.g., `x-custom-field`) is supported. A field such as `x-behaviorPolicies` MAY declare semantic or LLM behavior constraints for a consuming system, but such extensions are report-only unless that consumer defines explicit enforcement semantics. They MUST NOT be treated as core runtime security enforcement by default.
 
 ### 8.2. Versioning Strategy
 

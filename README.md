@@ -15,6 +15,7 @@ Build and run:
 
 ```bash
 cargo run -- validate examples/log-processor.passport.yaml
+cargo run -- validate examples/specauthor-behavior-policy.passport.yaml
 ```
 
 Install locally:
@@ -45,6 +46,12 @@ The validator checks:
 - signature field presence and base64 syntax
 - optional SHA-256/SHA-512 file integrity checks via
   `agentIntegrity.codeHashes`
+
+The v1alpha1 validator is intentionally forward-compatible: unknown fields are
+ignored by the core validator. Experimental `x-*` fields such as
+`x-behaviorPolicies` may be used for semantic or LLM behavior declarations, but
+they are report-only extension data unless a consuming system explicitly
+implements their meaning. They are not runtime security enforcement by default.
 
 Full cryptographic signature verification is intentionally not implemented yet:
 the RFC still needs a canonicalization profile and trust-store model so that

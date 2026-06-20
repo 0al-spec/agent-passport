@@ -1,0 +1,68 @@
+passport:
+  apiVersion: "agent-passport.io/v1alpha1"
+  kind: "AgentPassport"
+  metadata:
+    name: "specauthor-agent"
+    uid: "6a8a0fef-7e6f-4fc9-8847-4f42b5d78146"
+    version: "0.1.0"
+    issueDate: "2026-01-01T00:00:00Z"
+    expiryDate: "9999-12-31T23:59:59Z"
+    issuer: "0AL Internal Draft Authority"
+  spec:
+    entity:
+      type: "LLM-agent"
+      description: "Produces review-only specification drafts under semantic authoring constraints."
+      owner: "0AL SpecGraph"
+      contact: "https://github.com/0al-spec/SpecGraph"
+    capabilities:
+      - name: "compose_specification"
+        description: "Creates review-only generated specification artifacts."
+        signature:
+          parameters:
+            - name: "operator_intent"
+              type: "string"
+              required: true
+            - name: "active_context"
+              type: "object"
+              required: true
+          returns:
+            type: "object"
+            description: "Review-only generated specification artifact."
+        accessControl:
+          - "specgraph-operators"
+    resources:
+      cpu: "1000m"
+      memory: "2Gi"
+      fileSystemAccess:
+        - path: "/workspace/specgraph"
+          permissions:
+            - "read"
+            - "write"
+    securityPolicies:
+      capabilities: []
+      networkRestrictions:
+        denyList:
+          - "0.0.0.0/0"
+      executionEnvironment:
+        isolated: true
+        privileged: false
+  x-behaviorPolicies:
+    - id: "specgraph.specauthor.behavior-policy.v0.1"
+      status: "experimental"
+      appliesTo:
+        - "compose_specification"
+      reportOnly: true
+      runtimeEnforcement: false
+      requires:
+        ontologyResolution: true
+        contextResolution: true
+        claimCalibration: "FGR"
+      rejectsOutputWhen:
+        - "missing_active_frame"
+        - "strong_claim_without_fgr"
+        - "low_reliability_decision"
+  signature:
+    algorithm: "EdDSA"
+    value: "ZHJhZnQtc2lnbmF0dXJl"
+    publicKeyRef: "did:example:0al:specauthor-agent:key1"
+    signedBy: "0ALInternalDraftSigner"
