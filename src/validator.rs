@@ -1123,6 +1123,35 @@ mod tests {
         }));
     }
 
+    #[test]
+    fn accepts_experimental_x_behavior_policies_extension() {
+        let source = valid_passport().replace(
+            r#"  signature:
+    algorithm: "EdDSA""#,
+            r#"  x-behaviorPolicies:
+    - id: "specgraph.specauthor.behavior-policy.v0.1"
+      status: "experimental"
+      appliesTo:
+        - "process_logs"
+      reportOnly: true
+      runtimeEnforcement: false
+      requires:
+        contextResolution: true
+      rejectsOutputWhen:
+        - "missing_active_context"
+  signature:
+    algorithm: "EdDSA""#,
+        );
+
+        let report = validate_str(&source, &CheckOptions::default());
+
+        assert!(
+            report.valid,
+            "expected x-behaviorPolicies extension to remain report-only/ignored, got: {:?}",
+            report.checks
+        );
+    }
+
     fn valid_passport() -> &'static str {
         r#"passport:
   apiVersion: "agent-passport.io/v1alpha1"
